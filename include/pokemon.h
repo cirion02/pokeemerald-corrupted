@@ -183,6 +183,23 @@ struct PokemonSubstruct3
  /* 0x0B */ u32 modernFatefulEncounter:1;
 };
 
+enum {
+    NO_CORRUPTION,
+    LMAO_WASTE_SPACE = 127,
+};
+
+struct PokemonSubstructCorruptions
+{
+    u8 corruption1Type;
+    u16 corruption1Data;
+    u8 corruption2Type;
+    u16 corruption2Data;
+    u8 corruption3Type;
+    u16 corruption3Data;
+    u8 corruption4Type;
+    u16 corruption4Data;
+};
+
 // Number of bytes in the largest Pokémon substruct.
 // They are assumed to be the same size, and will be padded to
 // the largest size by the union.
@@ -190,7 +207,8 @@ struct PokemonSubstruct3
 #define NUM_SUBSTRUCT_BYTES (max(sizeof(struct PokemonSubstruct0),     \
                              max(sizeof(struct PokemonSubstruct1),     \
                              max(sizeof(struct PokemonSubstruct2),     \
-                                 sizeof(struct PokemonSubstruct3)))))
+                             max(sizeof(struct PokemonSubstruct3),     \
+                                 sizeof(struct PokemonSubstructCorruptions))))))
 
 union PokemonSubstruct
 {
@@ -198,6 +216,7 @@ union PokemonSubstruct
     struct PokemonSubstruct1 type1;
     struct PokemonSubstruct2 type2;
     struct PokemonSubstruct3 type3;
+    struct PokemonSubstructCorruptions corruptions;
     u16 raw[NUM_SUBSTRUCT_BYTES / 2]; // /2 because it's u16, not u8
 };
 
@@ -219,8 +238,8 @@ struct BoxPokemon
 
     union
     {
-        u32 raw[(NUM_SUBSTRUCT_BYTES * 4) / 4]; // *4 because there are 4 substructs, /4 because it's u32, not u8
-        union PokemonSubstruct substructs[4];
+        u32 raw[(NUM_SUBSTRUCT_BYTES * 5) / 4]; // *5 because there are 5 substructs, /4 because it's u32, not u8
+        union PokemonSubstruct substructs[5];
     } secure;
 };
 

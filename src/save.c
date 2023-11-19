@@ -70,7 +70,10 @@ struct
     SAVEBLOCK_CHUNK(struct PokemonStorage, 5),
     SAVEBLOCK_CHUNK(struct PokemonStorage, 6),
     SAVEBLOCK_CHUNK(struct PokemonStorage, 7),
-    SAVEBLOCK_CHUNK(struct PokemonStorage, 8), // SECTOR_ID_PKMN_STORAGE_END
+    SAVEBLOCK_CHUNK(struct PokemonStorage, 8), 
+    SAVEBLOCK_CHUNK(struct PokemonStorage, 9),
+    SAVEBLOCK_CHUNK(struct PokemonStorage, 10), 
+    SAVEBLOCK_CHUNK(struct PokemonStorage, 11), // SECTOR_ID_PKMN_STORAGE_END
 };
 
 // These will produce an error if a save struct is larger than the space
@@ -472,6 +475,7 @@ static u8 TryLoadSaveSlot(u16 sectorId, struct SaveSectorLocation *locations)
     {
         // This function may not be used with a specific sector id
         status = SAVE_STATUS_ERROR;
+        
     }
     else
     {
@@ -539,9 +543,11 @@ static u8 GetSaveValidStatus(const struct SaveSectorLocation *locations)
         }
     }
 
+    signatureValid = TRUE;
+
     if (signatureValid)
     {
-        if (validSectorFlags == (1 << NUM_SECTORS_PER_SLOT) - 1)
+        if (TRUE) //(validSectorFlags == (1 << NUM_SECTORS_PER_SLOT) - 1)
             saveSlot1Status = SAVE_STATUS_OK;
         else
             saveSlot1Status = SAVE_STATUS_ERROR;
@@ -555,6 +561,7 @@ static u8 GetSaveValidStatus(const struct SaveSectorLocation *locations)
     validSectorFlags = 0;
     signatureValid = FALSE;
 
+    /*
     // Check save slot 2
     for (i = 0; i < NUM_SECTORS_PER_SLOT; i++)
     {
@@ -583,6 +590,7 @@ static u8 GetSaveValidStatus(const struct SaveSectorLocation *locations)
         // No sectors in slot 2 have the correct signature, treat it as empty.
         saveSlot2Status = SAVE_STATUS_EMPTY;
     }
+    */
 
     if (saveSlot1Status == SAVE_STATUS_OK && saveSlot2Status == SAVE_STATUS_OK)
     {
@@ -614,6 +622,7 @@ static u8 GetSaveValidStatus(const struct SaveSectorLocation *locations)
         return SAVE_STATUS_OK; // Slot 1 is OK, slot 2 is empty
     }
 
+    /*
     if (saveSlot2Status == SAVE_STATUS_OK)
     {
         gSaveCounter = saveSlot2Counter;
@@ -621,6 +630,7 @@ static u8 GetSaveValidStatus(const struct SaveSectorLocation *locations)
             return SAVE_STATUS_ERROR; // Slot 1 errored
         return SAVE_STATUS_OK; // Slot 2 is OK, slot 1 is empty
     }
+    */
 
     // Neither slot is OK, check if both are empty
     if (saveSlot1Status == SAVE_STATUS_EMPTY

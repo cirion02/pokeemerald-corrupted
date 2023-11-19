@@ -31,7 +31,7 @@ struct PlayerInfo
 };
 
 // Save data using TryWriteSpecialSaveSector is allowed to exceed SECTOR_DATA_SIZE (up to the counter field)
-STATIC_ASSERT(sizeof(struct RecordedBattleSave) <= SECTOR_COUNTER_OFFSET, RecordedBattleSaveFreeSpace);
+STATIC_ASSERT(sizeof(struct RecordedBattleSave) <= SECTOR_COUNTER_OFFSET * NUM_REPLAY_SECTORS, RecordedBattleSaveFreeSpace);
 
 EWRAM_DATA u32 gRecordedBattleRngSeed = 0;
 EWRAM_DATA u32 gBattlePalaceMoveSelectionRngValue = 0;
@@ -277,7 +277,7 @@ static bool32 IsRecordedBattleSaveValid(struct RecordedBattleSave *save)
 
 static bool32 RecordedBattleToSave(struct RecordedBattleSave *battleSave, struct RecordedBattleSave *saveSector)
 {
-    memset(saveSector, 0, SECTOR_SIZE);
+    memset(saveSector, 0, SECTOR_SIZE * NUM_REPLAY_SECTORS);
     memcpy(saveSector, battleSave, sizeof(*battleSave));
 
     saveSector->checksum = CalcByteArraySum((void *)(saveSector), sizeof(*saveSector) - 4);
@@ -297,7 +297,7 @@ bool32 MoveRecordedBattleToSaveData(void)
 
     saveAttempts = 0;
     battleSave = AllocZeroed(sizeof(struct RecordedBattleSave));
-    savSection = AllocZeroed(SECTOR_SIZE);
+    savSection = AllocZeroed(SECTOR_SIZE * NUM_REPLAY_SECTORS);
 
     for (i = 0; i < PARTY_SIZE; i++)
     {

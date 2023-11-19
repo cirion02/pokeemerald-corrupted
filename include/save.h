@@ -18,16 +18,18 @@
 #define SECTOR_ID_SAVEBLOCK1_START    1
 #define SECTOR_ID_SAVEBLOCK1_END      4
 #define SECTOR_ID_PKMN_STORAGE_START  5
-#define SECTOR_ID_PKMN_STORAGE_END   13
-#define NUM_SECTORS_PER_SLOT         14
-// Save Slot 1: 0-13;  Save Slot 2: 14-27
-#define SECTOR_ID_HOF_1              28
-#define SECTOR_ID_HOF_2              29
-#define SECTOR_ID_TRAINER_HILL       30
-#define SECTOR_ID_RECORDED_BATTLE    31
-#define SECTORS_COUNT                32
+#define SECTOR_ID_PKMN_STORAGE_END   16
+#define NUM_SECTORS_PER_SLOT         17
+// Save Slot 1: 0-16;  Save Slot 2: 17-33
+#define SECTOR_ID_HOF_1              34
+#define SECTOR_ID_HOF_2              36
+#define SECTOR_ID_TRAINER_HILL       38
+#define SECTOR_ID_RECORDED_BATTLE    39
+#define SECTORS_COUNT                41
 
 #define NUM_HOF_SECTORS 2
+
+#define NUM_REPLAY_SECTORS 2
 
 #define SAVE_STATUS_EMPTY    0
 #define SAVE_STATUS_OK       1
